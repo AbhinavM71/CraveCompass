@@ -1,0 +1,62 @@
+# root/docker-compose.yaml
+services:
+
+  # ————————————————
+  # Primary / Master Node
+  # ————————————————
+  postgres-master:
+    image: postgis/postgis:15-3.3
+    container_name: postgres-master
+    restart: always
+    environment:
+      POSTGRES_DB: zomato
+      POSTGRES_USER: zomato
+      POSTGRES_PASSWORD: zomato123
+    ports:
+      - "5432:5432"
+    volumes:
+      # Persistent data dir
+      - master_data:/var/lib/postgresql/data
+      # Your init scripts: create tables, load data, AND create the replication role + settings
+      - ./init/db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "zomato"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Use the default entrypoint; we just let it init & start Postgres
+
+  # ————————————————
+  # Replica / Slave Node
+  # ————————————————
+  postgres-replica1:
+    image: postgis/postgis:15-3.3
+    container_name: postgres-replica1
+    depends_on:
+      postgres-master:
+        condition: service_healthy
+    environment:
+      POSTGRES_USER: zomato        # we’ll use the same user for authentication
+      POSTGRES_PASSWORD: zomato123
+    volumes:
+      - replica1_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        # 1) Clean any old data directory
+        rm -rf /var/lib/postgresql/data/* && \
+        # 2) Take a streaming base backup from the master
+        pg_basebackup \
+          -h postgres-master \
+          -D /var/lib/postgresql/data \
+          -U zomato \
+          -Fp -Xs -P -R && \
+        # 3) Hand off to the normal entrypoint to start Postgres in standby mode
+        exec docker-entrypoint.sh postgres
+
+volumes:
+  master_data:
+  replica1_data:
