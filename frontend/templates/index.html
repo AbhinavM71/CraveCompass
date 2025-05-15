@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CRAVECOMPASS - Login</title>
+  <!-- CSS will resolve to /static/style.css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="header">CRAVECOMPASS</div>
+
+  <!-- Food images with static path -->
+  <img src="{{ url_for('static', filename='image_docs/banana_image.png') }}" class="pizza top-left" alt="banana" />
+  <img src="{{ url_for('static', filename='image_docs/burger_image.png') }}" class="pizza top-middle-left" alt="burger" />
+  <img src="{{ url_for('static', filename='image_docs/chicken_image.png') }}" class="pizza top-middle-right" alt="chicken" />
+  <img src="{{ url_for('static', filename='image_docs/pizza_image.png') }}" class="pizza top-right" alt="pizza" />
+  <img src="{{ url_for('static', filename='image_docs/french_fries_image.png') }}" class="pizza mid-left" alt="fries" />
+  <img src="{{ url_for('static', filename='image_docs/kadhi_image.png') }}" class="pizza mid-right" alt="kadhi" />
+  <img src="{{ url_for('static', filename='image_docs/milkshake_image.png') }}" class="pizza bottom-left" alt="milkshake" />
+  <img src="{{ url_for('static', filename='image_docs/noodles1_image.png') }}" class="pizza bottom-middle-left" alt="noodles1" />
+  <img src="{{ url_for('static', filename='image_docs/paneer_cubes_image.png') }}" class="pizza bottom-middle-right" alt="paneer" />
+  <img src="{{ url_for('static', filename='image_docs/qasadilla_image.png') }}" class="pizza bottom-right" alt="qasadilla" />
+  <img src="{{ url_for('static', filename='image_docs/samosa_image.png') }}" class="pizza box-left" alt="samosa" />
+  <img src="{{ url_for('static', filename='image_docs/pizza_image.png') }}" class="pizza box-right" alt="pizza2" />
+  <img src="{{ url_for('static', filename='image_docs/dining_image.png') }}" class="pizza box-bottom" alt="dining" />
+  <img src="{{ url_for('static', filename='image_docs/pizza_image.png') }}" class="pizza box-top-left" alt="pizza3" />
+  <img src="{{ url_for('static', filename='image_docs/noodles2_image.png') }}" class="pizza box-top-right" alt="noodles2" />
+
+  <!-- Login form -->
+  <div class="form-box">
+    <h2>SIGN IN</h2>
+    <form action="/signin" method="POST">
+      <label>Email Address</label><br>
+      <input type="email" name="email" required><br>
+      <label>Password</label><br>
+      <input type="password" name="password" required><br>
+      <button type="submit">SIGN IN?</button>
+      <a href="/signup" class="signup-link">SIGN UP?</a>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="color:red; font-weight:bold;">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+  </div>
+</body>
+</html>

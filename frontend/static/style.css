@@ -1,0 +1,100 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fcb953;
+  }
+  .pizza {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+  }
+  /* .pizza2{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+  } */
+  .top-left { top: 150px; left: 40px; }
+  .top-middle-left { top: 200px; left: 250px; }
+  .top-middle-right { top: 200px; right: 250px; }
+  .top-right { top: 150px; right: 40px; }
+  .box-left{top:390px;left: 410px;}
+  .box-right{top:390px;right: 410px;}
+  .mid-left { top: 390px; left: 150px; }
+  .mid-right { top: 390px; right: 150px; }
+  .box-bottom{bottom:50px ; right: 750px;z-index: -1;}
+  .bottom-left { bottom: 100px; left: 40px; }
+  .bottom-middle-left { bottom: 100px; left: 350px; }
+  .bottom-middle-right { bottom: 100px; right: 350px; }
+  .bottom-right { bottom: 100px; right: 40px; }
+  .box-top-left{top:175px ; left:450px;}
+  .box-top-right{top: 175px; right: 450px;}
+  .header {
+    background-color: red;
+    color: white; /* Changed from black to white for better contrast */
+    text-align: center;
+    padding: 30px;
+    font-size: 50px;
+    font-weight: bold;
+  }
+  
+  .form-box {
+    background-color: #ddd;
+    width: 300px;
+    margin: 80px auto;
+    padding: 30px;
+    text-align: center;
+    border: 2px solid black;
+  }
+  
+  .form-box h2 {
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  
+  button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    width: 100%;
+    font-size: 16px;         /* Make font size consistent */
+    font-weight: bold;       /* Bold to match "SIGN UP?" */
+    font-family: Arial, sans-serif; /* Match font family */
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  a {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 16px;         /* Match with button font size */
+    font-weight: bold;       /* Match font weight */
+    font-family: Arial, sans-serif; /* Match font family */
+    text-decoration: none;
+    color: purple;
+  }
+  /* New style for the black box link */
+  /* .back-to-login {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    text-align: center;
+  } */
+  .back-to-login:hover {
+    background-color: #fffdfd;
+  }
+  
