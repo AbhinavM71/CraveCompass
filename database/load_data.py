@@ -58,15 +58,17 @@ df["votes"]                 = pd.to_numeric(df["votes"],                errors="
 # 7) Connect to Postgres
 engine = create_engine("postgresql://zomato:zomato123@localhost:5432/zomato")
 
-# 8) (Re)create the table with an appropriate schema, including 'country'
 with engine.begin() as conn:
+    # Enable PostGIS extension
+    conn.execute(text("CREATE EXTENSION IF NOT EXISTS postgis;"))
+    # Drop and recreate the table, now including the geom column
     conn.execute(text("DROP TABLE IF EXISTS restaurants;"))
     conn.execute(text("""
     CREATE TABLE restaurants (
         restaurant_id         INTEGER PRIMARY KEY,
         restaurant_name       TEXT,
         country_code          INTEGER,
-        country               TEXT,           -- added this column
+        country               TEXT,
         city                  TEXT,
         address               TEXT,
         locality              TEXT,
@@ -84,11 +86,24 @@ with engine.begin() as conn:
         aggregate_rating      DOUBLE PRECISION,
         rating_color          TEXT,
         rating_text           TEXT,
-        votes                 INTEGER
+        votes                 INTEGER,
+        geom                  geography(Point,4326)
     );
     """))
 
-# 9) Bulk‐load the data
+# 8) Bulk-load the data
 df.to_sql("restaurants", engine, index=False, if_exists="append")
 
-print("✅ Loaded", len(df), "restaurants into Postgres.")
+with engine.begin() as conn:
+    # 9) Populate geom from longitude/latitude
+    conn.execute(text("""
+        UPDATE restaurants
+           SET geom = ST_SetSRID(
+               ST_MakePoint(longitude, latitude),
+               4326
+           )::geography;
+    """))
+    # 10) Create a spatial index on geom
+    conn.execute(text("CREATE INDEX ON restaurants USING GIST (geom);"))
+
+print("✅ Loaded", len(df), "restaurants into Postgres, with geom column added.")
