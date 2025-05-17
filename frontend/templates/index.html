@@ -7,9 +7,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="main-wrapper">
+  <div class="scroll-wrapper">
+    
   <div class="header">CRAVECOMPASS</div>
 
   <!-- Food images with static path -->
+  <img src="{{ url_for('static', filename='image_docs/logo.png') }}" alt="Logo" style="height:100px; vertical-align:middle; margin-right:100px;">
+
   <img src="{{ url_for('static', filename='image_docs/banana_image.png') }}" class="pizza top-left" alt="banana" />
   <img src="{{ url_for('static', filename='image_docs/burger_image.png') }}" class="pizza top-middle-left" alt="burger" />
   <img src="{{ url_for('static', filename='image_docs/chicken_image.png') }}" class="pizza top-middle-right" alt="chicken" />
@@ -43,6 +48,8 @@
         <div style="color:red; font-weight:bold;">{{ messages[0] }}</div>
       {% endif %}
     {% endwith %}
+  </div>
+  </div>
   </div>
 </body>
 </html>

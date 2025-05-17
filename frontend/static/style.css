@@ -1,9 +1,36 @@
-body {
+html,body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    padding: 0;
+    height:100%;
+    /* font-family: Arial, sans-serif; */
     background-color: #fcb953;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-width: 1400px;
+    overflow-x: auto;
+    background: linear-gradient(135deg, #ffcb75 0%, #ffb580 100%);
   }
+   .main-wrapper {
+    position: relative;
+    min-width: 1400px;    /* This locks the width */
+    width: 1400px;
+    margin: 0 auto;        /* Center on larger screens */
+    height: 900px;    
+    min-height: 100vh;
+    /* Or whatever fits your design */
+  } 
+  @keyframes float {
+    0% { transform: translateY(0px);}
+    50% { transform: translateY(-12px);}
+    100% { transform: translateY(0px);}
+}
+scroll-wrapper {
+  min-width: 1400px;
+  width: 100vw;
+  overflow-x: auto;
+}
+
   .pizza {
+    animation: float 4s ease-in-out infinite;
     width: 50px;
     height: 50px;
     position: absolute;
@@ -21,7 +48,7 @@ body {
   .box-right{top:390px;right: 410px;}
   .mid-left { top: 390px; left: 150px; }
   .mid-right { top: 390px; right: 150px; }
-  .box-bottom{bottom:50px ; right: 750px;z-index: -1;}
+  .box-bottom{bottom:20px ; right: 750px;z-index: -1;}
   .bottom-left { bottom: 100px; left: 40px; }
   .bottom-middle-left { bottom: 100px; left: 350px; }
   .bottom-middle-right { bottom: 100px; right: 350px; }
@@ -29,14 +56,48 @@ body {
   .box-top-left{top:175px ; left:450px;}
   .box-top-right{top: 175px; right: 450px;}
   .header {
+    width: 100%;
+
     background-color: red;
     color: white; /* Changed from black to white for better contrast */
     text-align: center;
-    padding: 30px;
+    padding: 30px 0;
+    width: 100%;
     font-size: 50px;
     font-weight: bold;
+    letter-spacing:2px;
+    box-sizing: border-box;
+  }
+  .slider-container {
+    width: 100%; /* or desired width */
   }
   
+/* Start hidden */
+#filter-panel {
+  display: none;
+}
+
+/* When it has the “open” class, show it */
+#filter-panel.open {
+  display: block;
+}
+
+  .form-box {
+    background: rgba(255, 255, 255, 0.85);  
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 18px;
+    width: 350px;
+    margin: 80px auto;
+    padding: 40px 30px 30px 30px;
+    text-align: center;
+    border: 2px solid #fff7;
+    transition: box-shadow 0.3s;
+}
+.form-box:hover {
+    box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.32);
+}
   .form-box {
     background-color: #ddd;
     width: 300px;
@@ -53,25 +114,36 @@ body {
   input[type="text"],
   input[type="email"],
   input[type="password"] {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 14px;
+    width: 92%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1.5px solid #ffb974;
+    border-radius: 7px;
+    font-size: 16px;
+    transition: border 0.25s;
   }
-  
+  input:focus {
+    border: 1.5px solid #ff0055;
+    outline: none;
+}
   button {
-    background-color: black;
+    background: linear-gradient(90deg, #ff8800 0%, #ff0055 100%);
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
     width: 100%;
-    font-size: 16px;         /* Make font size consistent */
-    font-weight: bold;       /* Bold to match "SIGN UP?" */
-    font-family: Arial, sans-serif; /* Match font family */
+    font-size: 18px;
+    font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: background 0.3s, transform 0.15s;
   }
-  
+  button:hover {
+    background: linear-gradient(90deg, #ff0055 0%, #ff8800 100%);
+    transform: translateY(-2px) scale(1.04);
+}
   a {
     display: block;
     margin-top: 15px;

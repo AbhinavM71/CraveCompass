@@ -1,16 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome - CRAVECOMPASS</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>CRAVECOMPASS - Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+
+.restaurant-block {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    background: #fff;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .restaurant-block .number {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  .restaurant-block .name {
+    font-size: 1rem;
+    color: #222;
+  }
+  .restaurant-block .info {
+    text-align: center;
+  }
+  .restaurant-block .info a {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #ff8008;
+    transition: color .2s;
+  }
+  .restaurant-block .info a:hover {
+    color: #ff0080;
+  }
+
+
+
+
+    /* ── BASIC LAYOUT ───────────────────────────────────────────────────────── */
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: Arial, sans-serif;
+      background: #fcb953;
+    }
+    .header {
+      background: red; color: white;
+      font-weight: bold; font-size: 30px;
+      padding: 15px; text-align: center;
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 70px);
+    }
+    .sidebar {
+      width: 350px; background: #fbb857;
+      padding: 15px; box-sizing: border-box;
+      display: flex; flex-direction: column; gap: 15px;
+      overflow-y: auto;
+    }
+    .content {
+      flex-grow: 1; background: #eb8585;
+      padding: 10px; box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    /* ── SECTION BOXES ───────────────────────────────────────────────────────── */
+    .section {
+      background: #f4d3a1;
+      border: 2px solid #d09bfa;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+    .section h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px; font-weight: bold;
+    }
+    label {
+      display: block; margin-bottom: 5px;
+      font-weight: 600;
+    }
+    input[type="number"],
+    input[type="file"],
+    select {
+      width: 100%; padding: 8px 10px; font-size: 16px;
+      margin-bottom: 10px; border-radius: 3px;
+      border: 1px solid #aaa; box-sizing: border-box;
+    }
+    input[type="range"] { width: 100%; }
+    .range-label {
+      display: flex; justify-content: space-between;
+      font-size: 14px; font-weight: 700;
+      margin: -8px 0 10px;
+    }
+    .range-label span { flex:1; text-align:center; }
+
+    /* ── BUTTONS ───────────────────────────────────────────────────────────── */
+    button.apply-btn {
+      width: 100%; padding: 12px; font-size: 16px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff8008, #ff0080);
+      color: white; border: none; border-radius: 8px;
+      cursor: pointer; margin-top: 10px;
+      transition: background 0.3s;
+    }
+    button.apply-btn:hover {
+      background: linear-gradient(90deg, #ff0080, #ff8008);
+    }
+    button.btn-icon {
+      background: none; border: none;
+      cursor: pointer; padding: 5px;
+      font-weight: bold; color: white;
+      background: linear-gradient(90deg, #ff8008, #ff0080);
+      border-radius: 5px;
+    }
+    button.btn-icon:hover {
+      opacity: 0.9;
+    }
+
+    /* ── FILTER PANEL HIDING ────────────────────────────────────────────────── */
+    #filter-panel {
+      display: none;
+    }
+    #filter-panel.open {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <div class="header">CRAVECOMPASS</div>
-  <div class="form-box">
-    <h2>Welcome!</h2>
-    <p>You have successfully signed in.</p>
-    <a href="index.html">Logout</a>
+  <div class="header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+    <!-- Left filler -->
+    <div style="flex: 1;"></div>
+  
+    <!-- Centered brand title -->
+    <div style="font-size: 50px; font-weight: bold; flex: 1; text-align: center;">
+      CRAVECOMPASS
+    </div>
+  
+    <!-- Right search bar and icon -->
+    <form action="{{ url_for('search_by_text') }}" method="POST"
+          style="display: flex; align-items: center; flex: 1; justify-content: flex-end; gap: 6px;">
+      
+      <!-- Search input -->
+      <input
+        type="text"
+        name="query"
+        placeholder="Search restaurants..."
+        required
+        style="padding: 10px 14px; font-size: 20px; width: 400px;
+               border-radius: 6px; border: none;">
+      
+      <!-- Small search icon button -->
+      <button type="submit"
+              style="height: 40px; width: 40px; display: flex; align-items: center; justify-content: center;
+                     background: linear-gradient(90deg, #ff8008, #ff0080);
+                     border: none; border-radius: 5px; cursor: pointer;">
+        <span style="font-size: 18px;">🔍</span>
+      </button>
+    </form>
   </div>
+  
+
+  <div class="container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- IMAGE PREDICTION FORM -->
+      <div class="section">
+        <h3>Enter Food Image</h3>
+        <form id="predict-form"
+              action="{{ url_for('predict_cuisine') }}"
+              method="POST"
+              enctype="multipart/form-data">
+          <input
+            type="file"
+            name="image"
+            id="food_image"
+            accept="image/*"
+            required>
+          <button type="submit" class="apply-btn">Predict Cuisine</button>
+          <button
+            type="reset"
+            id="clear-image-btn"
+            class="apply-btn"
+            style="background:#ccc;color:#333;display:none;">
+            Clear Image
+          </button>
+        </form>
+
+        {% if predicted_dish %}
+          <div style="background:#fff3cd; color:#856404; padding:10px; margin-top:10px; border-radius:5px;">
+            <strong>Predicted Dish:</strong> {{ predicted_dish }}<br>
+            <strong>Predicted Cuisine:</strong> {{ predicted_cuisine }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- FILTER TOGGLE BUTTON -->
+      <div style="text-align:center;">
+        <button type="button" id="filter-toggle" class="btn-icon">Filters</button>
+      </div>
+
+      <!-- FILTER & SEARCH RESTRO FORM -->
+      <form id="filter-form"
+            action="{{ url_for('search_restaurants') }}"
+            method="POST">
+
+        <!-- moved INSIDE this form -->
+        <div class="section">
+          <h3>Enter Location</h3>
+          <label for="longitude">Longitude</label>
+          <input type="number"
+                 step="any"
+                 id="longitude"
+                 name="longitude"
+                 placeholder="e.g. 77.2090"
+                 required>
+          <label for="latitude">Latitude</label>
+          <input type="number"
+                 step="any"
+                 id="latitude"
+                 name="latitude"
+                 placeholder="e.g. 28.6139"
+                 required>
+        </div>
+
+        <div id="filter-panel" class="section">
+          <label for="cuisine">Cuisine Type</label>
+          <select name="cuisine" id="cuisine">
+            <option value="" selected>Any</option>
+            <option>Indian</option>
+            <option>Italian</option>
+            <option>Chinese</option>
+            <option>Mexican</option>
+          </select>
+
+          <label for="country">Country</label>
+          <select name="country" id="country">
+            <option value="" selected>Any</option>
+            <option>India</option>
+            <option>USA</option>
+            <option>Italy</option>
+            <option>Mexico</option>
+          </select>
+
+          <label for="cost_for_two">Cost for Two</label>
+          <input type="range"
+                 name="cost_for_two"
+                 id="cost_for_two"
+                 min="100"
+                 max="20000"
+                 step="50"
+                 value="1000"
+                 oninput="document.getElementById('cost_output').innerText = this.value">
+          <div class="range-label">
+            <span id="cost_output">1000</span>
+          </div>
+        </div>
+
+        <!-- renamed button -->
+        <button type="submit" class="apply-btn">Search Restro</button>
+      </form>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="content">
+      <h2>Welcome to CRAVECOMPASS</h2>
+    
+      {% if restaurants %}
+        {% for r in restaurants %}
+          <div class="restaurant-block">
+            <div class="number">{{ loop.index + ((page - 1) * per_page) }}</div>
+            <div class="name">{{ r.name }}</div>
+            <div class="info">
+              <a href="{{ url_for('restaurant_detail', rid=r.id) }}">→</a>
+            </div>
+          </div>
+        {% endfor %}
+    
+        <!-- ── SYMMETRICAL PAGINATION WIDGET ─────────────────────────── -->
+        <style>
+          .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 360px;
+            margin: 20px auto 0;
+          }
+          .pagination .btn-page {
+            flex: 0 0 100px;
+            padding: 8px 0;
+            background: linear-gradient(90deg, #ff8008, #ff0080);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+          }
+          .pagination .btn-page.disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+          .pagination .page-info {
+            flex: 1;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+          }
+        </style>
+    
+        <div class="pagination">
+          {# ── Previous button ───────────────────────────────── #}
+          {% if page > 1 %}
+            {% if request.endpoint == 'search_by_text' %}
+              <a href="{{ url_for('search_by_text', page=page-1, query=query) }}"
+                 class="btn-page">Previous</a>
+            {% else %}
+              <a href="{{ url_for('search_restaurants',
+                                  page=page-1,
+                                  longitude=longitude,
+                                  latitude=latitude,
+                                  cuisine=cuisine,
+                                  country=country,
+                                  cost_for_two=cost_for_two) }}"
+                 class="btn-page">Previous</a>
+            {% endif %}
+          {% else %}
+            <button class="btn-page disabled" disabled>Previous</button>
+          {% endif %}
+    
+          {# ── Page X of Y ──────────────────────────────────── #}
+          <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+    
+          {# ── Next button ───────────────────────────────────── #}
+          {% if page < total_pages %}
+            {% if request.endpoint == 'search_by_text' %}
+              <a href="{{ url_for('search_by_text', page=page+1, query=query) }}"
+                 class="btn-page">Next</a>
+            {% else %}
+              <a href="{{ url_for('search_restaurants',
+                                  page=page+1,
+                                  longitude=longitude,
+                                  latitude=latitude,
+                                  cuisine=cuisine,
+                                  country=country,
+                                  cost_for_two=cost_for_two) }}"
+                 class="btn-page">Next</a>
+            {% endif %}
+          {% else %}
+            <button class="btn-page disabled" disabled>Next</button>
+          {% endif %}
+        </div>
+        <!-- ── END PAGINATION ───────────────────────────────────── -->
+      
+      {% else %}
+        <p>No restaurants found. Try changing your filters or location.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- FILTER PANEL TOGGLE SCRIPT -->
+  <script>
+    document.getElementById('filter-toggle')
+      .addEventListener('click', () => {
+        const panel = document.getElementById('filter-panel');
+        panel.classList.toggle('open');
+        if (panel.classList.contains('open')) {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+  </script>
+
+  <!-- CLEAR-IMAGE BUTTON VISIBILITY -->
+  <script>
+    const fileInput = document.getElementById('food_image');
+    const clearBtn  = document.getElementById('clear-image-btn');
+
+    fileInput.addEventListener('change', () => {
+      clearBtn.style.display = fileInput.files.length > 0 ? 'block' : 'none';
+    });
+    clearBtn.addEventListener('click', () => {
+      clearBtn.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
