@@ -131,8 +131,8 @@ def create_food_classifier():
 # model = tf.keras.models.load_model(...)
 # Use this instead
 model = create_food_classifier()
-print("Model loaded successfully")
-print(f"Model summary: {model.summary()}")
+#print("Model loaded successfully")
+#print(f"Model summary: {model.summary()}")
 # model.compile(
 #     optimizer=AdamW(weight_decay=1e-5),
 #     loss="sparse_categorical_crossentropy",
@@ -458,7 +458,13 @@ def predict_cuisine():
         flash("Select an image.", "warning")
         return redirect(url_for('home'))
     
-    base_dir = r"C:\Users\abhin\OneDrive - iitr.ac.in\OneDrive\Desktop\CraveCompass\CraveCompass\frontend\static\image_docs"
+     # Use a relative path based on Flask's static folder
+    base_dir = os.path.join(app.static_folder, 'image_docs')
+    
+    # Create the directory if it doesn't exist
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir, exist_ok=True)
+    
     temp_path = os.path.join(base_dir, "temp_food_image.jpg")
     
     try:
@@ -471,8 +477,8 @@ def predict_cuisine():
         img_array = img_to_array(img)
         
         # Print original image stats
-        print(f"Original image shape: {img_array.shape}")
-        print(f"Original min value: {np.min(img_array)}, max value: {np.max(img_array)}")
+        #print(f"Original image shape: {img_array.shape}")
+        #print(f"Original min value: {np.min(img_array)}, max value: {np.max(img_array)}")
         
         # Try simple [0,1] normalization
         img_array_normalized = img_array / 255.0
@@ -513,7 +519,7 @@ def predict_cuisine():
         else:
             idx = int(np.argmax(preds, axis=1)[0])
             confidence = float(preds[0][idx])
-            print(confidence)
+            #print(confidence)
             dish = class_names[idx]
             cuisine = dish_to_cuisine.get(dish, "Unknown")
             
