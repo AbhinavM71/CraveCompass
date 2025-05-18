@@ -16,6 +16,8 @@ html,body {
     margin: 0 auto;        /* Center on larger screens */
     height: 900px;    
     min-height: 100vh;
+    margin-top: 90px; /* add margin so content is not under the header */
+
     /* Or whatever fits your design */
   } 
   @keyframes float {
@@ -56,17 +58,20 @@ scroll-wrapper {
   .box-top-left{top:175px ; left:450px;}
   .box-top-right{top: 175px; right: 450px;}
   .header {
-    width: 100%;
-
-    background-color: red;
-    color: white; /* Changed from black to white for better contrast */
-    text-align: center;
-    padding: 30px 0;
-    width: 100%;
-    font-size: 50px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #09122C;  /* Dark blue background color */
+    color: white;
     font-weight: bold;
-    letter-spacing:2px;
-    box-sizing: border-box;
+    font-size: 50px;  /* Large font size */
+    padding: 15px 20px;  /* Vertical and horizontal padding */
+    text-align: center;
+    letter-spacing: 0.05em;  /* Increased letter spacing */
+    text-transform: uppercase;  /* Ensures all uppercase */
+    font-family: Arial, sans-serif;  /* Match the font family */
+    display: flex;
+    justify-content: center;
   }
   .slider-container {
     width: 100%; /* or desired width */

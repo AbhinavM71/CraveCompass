@@ -11,29 +11,58 @@
     grid-template-columns: 40px 1fr 40px;
     align-items: center;
     background: #fff;
-    padding: 10px 15px;
-    margin-bottom: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-weight: bold;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
+  .restaurant-block:nth-child(odd) {
+  background: #f9f9f9;
+}
+.restaurant-block:nth-child(even) {
+  background: #ff9e8f;
+}
+
   .restaurant-block .number {
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
   }
+  .header .title { letter-spacing: 0.05em; }
+  .restaurant-block + .restaurant-block {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin-top: 0;
+}
   .restaurant-block .name {
     font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.5;
     color: #222;
   }
+  .restaurant-block:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+}
+
+.restaurant-block:hover .info a {
+  color: #fff;
+}
   .restaurant-block .info {
     text-align: center;
   }
   .restaurant-block .info a {
     text-decoration: none;
     font-size: 1.5rem;
-    color: #ff8008;
+    color: #000;
     transition: color .2s;
   }
+
+  #sidebar-toggle:hover {
+  background: #1840b8;
+  transition: background 0.2s ease;
+}
   .restaurant-block .info a:hover {
     color: #ff0080;
   }
@@ -45,25 +74,44 @@
     body, html {
       margin: 0; padding: 0; height: 100%;
       font-family: Arial, sans-serif;
-      background: #fcb953;
+      background: #872341;
     }
     .header {
-      background: red; color: white;
-      font-weight: bold; font-size: 30px;
-      padding: 15px; text-align: center;
-    }
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #09122C;
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+  padding: 15px;
+  text-align: center;
+}
+
     .container {
       display: flex;
       height: calc(100vh - 70px);
     }
     .sidebar {
-      width: 350px; background: #fbb857;
+      width: 350px; background: #fbe1dd;
       padding: 15px; box-sizing: border-box;
       display: flex; flex-direction: column; gap: 15px;
       overflow-y: auto;
+      transition: width 0.3s ease, opacity 0.2s ease;
+      opacity: 1;
     }
+    .sidebar.collapsed {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.container {
+  transition: 0.3s ease;
+}
     .content {
-      flex-grow: 1; background: #eb8585;
+      flex-grow: 1; background: #ffcddc;
       padding: 10px; box-sizing: border-box;
       overflow-y: auto;
     }
@@ -131,43 +179,89 @@
   </style>
 </head>
 <body>
-  <div class="header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
-    <!-- Left filler -->
-    <div style="flex: 1;"></div>
-  
-    <!-- Centered brand title -->
-    <div style="font-size: 50px; font-weight: bold; flex: 1; text-align: center;">
-      CRAVECOMPASS
-    </div>
-  
-    <!-- Right search bar and icon -->
-    <form action="{{ url_for('search_by_text') }}" method="POST"
-          style="display: flex; align-items: center; flex: 1; justify-content: flex-end; gap: 6px;">
-      
-      <!-- Search input -->
-      <input
-        type="text"
-        name="query"
-        placeholder="Search restaurants..."
-        required
-        style="padding: 10px 14px; font-size: 20px; width: 400px;
-               border-radius: 6px; border: none;">
-      
-      <!-- Small search icon button -->
-      <button type="submit"
-              style="height: 40px; width: 40px; display: flex; align-items: center; justify-content: center;
-                     background: linear-gradient(90deg, #ff8008, #ff0080);
-                     border: none; border-radius: 5px; cursor: pointer;">
-        <span style="font-size: 18px;">🔍</span>
-      </button>
-    </form>
-  </div>
-  
+  <!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+<div class="header"
+style="position: relative;
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       padding: 10px 20px;
+       background: #09122C;">
+
+<!-- Leftmost button -->
+<button id="sidebar-toggle"
+     style="padding: 6px 12px;
+            width: 150px;
+            background: #09122C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;">
+Enter Your Location
+</button>
+
+<!-- Absolutely centered title -->
+<div class="title"
+  style="position: absolute;
+         left: 50%;
+         transform: translateX(-50%);
+         font-size: 50px;
+         font-weight: bold;
+         color: white;">
+CRAVECOMPASS
+</div>
+
+<!-- Right-hand search form (unchanged) -->
+<form action="{{ url_for('search_by_text') }}" method="POST"
+   style="display: flex;
+          align-items: center;
+          gap: 6px;">
+<input
+ type="text"
+ name="query"
+ placeholder="Search restaurants..."
+ required
+ style="padding: 10px 14px;
+        font-size: 20px;
+        width: 400px;
+        border-radius: 6px;
+        border: none;">
+<button type="submit"
+       style="height: 40px;
+              width: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: linear-gradient(90deg, #ff8008, #ff0080);
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;">
+ <span style="font-size: 18px;">🔍</span>
+</button>
+</form>
+</div>
+
 
   <div class="container">
     <!-- SIDEBAR -->
-    <div class="sidebar">
-
+    <div id = "sidebar" class="sidebar collapsed">
+      <div class="section">
+        <h3>Enter Location</h3>
+        <label for="longitude">Longitude</label>
+        <input type="number"
+               step="any"
+               id="longitude"
+               name="longitude"
+               placeholder="e.g. 77.2090"
+               required>
+        <label for="latitude">Latitude</label>
+        <input type="number"
+               step="any"
+               id="latitude"
+               name="latitude"
+               placeholder="e.g. 28.6139"
+               required>
+      </div>
       <!-- IMAGE PREDICTION FORM -->
       <div class="section">
         <h3>Enter Food Image</h3>
@@ -198,7 +292,7 @@
           </div>
         {% endif %}
       </div>
-
+      
       <!-- FILTER TOGGLE BUTTON -->
       <div style="text-align:center;">
         <button type="button" id="filter-toggle" class="btn-icon">Filters</button>
@@ -210,51 +304,59 @@
             method="POST">
 
         <!-- moved INSIDE this form -->
-        <div class="section">
-          <h3>Enter Location</h3>
-          <label for="longitude">Longitude</label>
-          <input type="number"
-                 step="any"
-                 id="longitude"
-                 name="longitude"
-                 placeholder="e.g. 77.2090"
-                 required>
-          <label for="latitude">Latitude</label>
-          <input type="number"
-                 step="any"
-                 id="latitude"
-                 name="latitude"
-                 placeholder="e.g. 28.6139"
-                 required>
-        </div>
+       
 
         <div id="filter-panel" class="section">
           <label for="cuisine">Cuisine Type</label>
           <select name="cuisine" id="cuisine">
             <option value="" selected>Any</option>
+            <option>American</option>
+            <option>British</option>
+            <option>Canadian</option>
+            <option>Chinese</option>
+            <option>French</option>
+            <option>Greek</option>
             <option>Indian</option>
             <option>Italian</option>
-            <option>Chinese</option>
+            <option>Japanese</option>
+            <option>Korean</option>
             <option>Mexican</option>
+            <option>Middle Eastern</option>
+            <option>Spanish</option>
+            <option>Thai</option>
+            <option>Vietnamese</option>
           </select>
 
           <label for="country">Country</label>
           <select name="country" id="country">
             <option value="" selected>Any</option>
             <option>India</option>
-            <option>USA</option>
+            <option>Australia</option>
+            <option>Brazil</option>
+            <option>Canada</option>
+            <option>Indonesia</option>
             <option>Italy</option>
             <option>Mexico</option>
+            <option>New Zealand</option>
+            <option>Philippines</option>
+            <option>Qatar</option>
+            <option>Singapore</option>
+            <option>South Africa</option>
+            <option>Sri Lanka</option>
+            <option>Turkey</option>
+            <option>UAE</option>
+            <option>United Kingdom</option>
+            <option>United States</option>
           </select>
 
           <label for="cost_for_two">Cost for Two</label>
           <input type="range"
                  name="cost_for_two"
                  id="cost_for_two"
-                 min="100"
+                 min="0"
                  max="20000"
-                 step="50"
-                 value="1000"
+                 step="5"
+                 value="0"
                  oninput="document.getElementById('cost_output').innerText = this.value">
           <div class="range-label">
             <span id="cost_output">1000</span>
@@ -283,6 +385,7 @@
     
         <!-- ── SYMMETRICAL PAGINATION WIDGET ─────────────────────────── -->
         <style>
+ 
           .pagination {
             display: flex;
             justify-content: space-between;
@@ -377,6 +480,26 @@
         }
       });
   </script>
+<script>
+ // Wait until DOM is parsed, then wire up the toggle
+// Update the toggle button to show/hide text based on sidebar state
+window.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+
+  if (toggleBtn && sidebar) {
+    // Keep the button text as "Enter Location" regardless of sidebar state
+    toggleBtn.textContent = "Enter Location";
+    
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      // No need to update text if it stays the same
+    });
+  } else {
+    console.warn('Sidebar toggle or sidebar container not found');
+  }
+});
+</script>
 
   <!-- CLEAR-IMAGE BUTTON VISIBILITY -->
   <script>

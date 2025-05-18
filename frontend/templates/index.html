@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>CRAVECOMPASS - Login</title>
-  <!-- CSS will resolve to /static/style.css -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="main-wrapper">
-  <div class="scroll-wrapper">
-    
   <div class="header">CRAVECOMPASS</div>
 
-  <!-- Food images with static path -->
-  <img src="{{ url_for('static', filename='image_docs/logo.png') }}" alt="Logo" style="height:100px; vertical-align:middle; margin-right:100px;">
-
+  <!-- Food images for decorative background -->
   <img src="{{ url_for('static', filename='image_docs/banana_image.png') }}" class="pizza top-left" alt="banana" />
   <img src="{{ url_for('static', filename='image_docs/burger_image.png') }}" class="pizza top-middle-left" alt="burger" />
   <img src="{{ url_for('static', filename='image_docs/chicken_image.png') }}" class="pizza top-middle-right" alt="chicken" />
@@ -31,7 +25,7 @@
   <img src="{{ url_for('static', filename='image_docs/pizza_image.png') }}" class="pizza box-top-left" alt="pizza3" />
   <img src="{{ url_for('static', filename='image_docs/noodles2_image.png') }}" class="pizza box-top-right" alt="noodles2" />
 
-  <!-- Login form -->
+  <!-- Sign In form -->
   <div class="form-box">
     <h2>SIGN IN</h2>
     <form action="/signin" method="POST">
@@ -42,14 +36,11 @@
       <button type="submit">SIGN IN?</button>
       <a href="/signup" class="signup-link">SIGN UP?</a>
     </form>
-
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <div style="color:red; font-weight:bold;">{{ messages[0] }}</div>
       {% endif %}
     {% endwith %}
-  </div>
-  </div>
   </div>
 </body>
 </html>
