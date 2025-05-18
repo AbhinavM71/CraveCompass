@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CRAVECOMPASS – {{ r.restaurant_name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Roboto', sans-serif;
+      background: #fcb953;
+    }
+/*header file*/
+    .header {
+position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #09122C;  /* Dark blue background color */
+  color: white;
+  font-weight: bold;
+  font-size: 50px;  /* Large font size */
+  padding: 15px 20px;  /* Vertical and horizontal padding */
+  text-align: center;
+  letter-spacing: 0.05em;  /* Increased letter spacing */
+  text-transform: uppercase;  /* Ensures all uppercase */
+  font-family: Arial, sans-serif;  /* Match the font family */
+  display: flex;
+  justify-content: center;
+}
+
+    .detail-page {
+      background: #ffcddc;
+      padding: 40px 20px;
+      min-height: calc(100vh - 90px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .restaurant-name {
+      font-size: 36px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+      border-bottom: 2px solid #ff0055;
+      padding-bottom: 10px;
+      width: fit-content;
+    }
+
+    .detail-card {
+      display: flex;
+      gap: 40px;
+      background: white;
+      border-radius: 12px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+
+    .field input:read-only {
+      background: #f9f9f9;
+    }
+
+    .order-section {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .order-section span {
+      font-size: 20px;
+      font-weight: 600;
+      color: #222;
+      margin-right: 20px;
+    }
+
+    .order-section button {
+      width: 100px;
+      padding: 12px;
+      margin: 0 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(90deg, #ff8008, #ff0080);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .header .title { letter-spacing: 0.05em; }
+    .order-section button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #ff0080, #ff8008);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">CRAVECOMPASS</div>
+
+  <div class="detail-page">
+    <div class="restaurant-name">{{ r.restaurant_name }}</div>
+
+    <div class="detail-card">
+      <div class="column">
+        <div class="field"><label>Restaurant id:</label><input type="text" value="{{ r.restaurant_id }}" readonly></div>
+        <div class="field"><label>Country:</label><input type="text" value="{{ r.country }}" readonly></div>
+        <div class="field"><label>City:</label><input type="text" value="{{ r.city }}" readonly></div>
+        <div class="field"><label>Address:</label><input type="text" value="{{ r.address }}" readonly></div>
+        <div class="field"><label>Locality:</label><input type="text" value="{{ r.locality }}" readonly></div>
+        <div class="field"><label>Longitude:</label><input type="text" value="{{ r.longitude }}" readonly></div>
+        <div class="field"><label>Latitude:</label><input type="text" value="{{ r.latitude }}" readonly></div>
+        <div class="field"><label>Currency:</label><input type="text" value="{{ r.currency }}" readonly></div>
+        <div class="field"><label>Votes:</label><input type="text" value="{{ r.votes }}" readonly></div>
+      </div>
+
+      <div class="column">
+        <div class="field"><label>Cuisines:</label><input type="text" value="{{ r.cuisines }}" readonly></div>
+        <div class="field"><label>Average cost for two:</label><input type="text" value="{{ r.average_cost_for_two }}" readonly></div>
+        <div class="field"><label>Has table booking:</label><input type="text" value="{{ r.has_table_booking }}" readonly></div>
+        <div class="field"><label>Has online delivery:</label><input type="text" value="{{ r.has_online_delivery }}" readonly></div>
+        <div class="field"><label>Is delivering now:</label><input type="text" value="{{ r.is_delivering_now }}" readonly></div>
+        <div class="field"><label>Switch to order menu:</label><input type="text" value="{{ r.switch_to_order_menu }}" readonly></div>
+        <div class="field"><label>Price range:</label><input type="text" value="{{ r.price_range }}" readonly></div>
+        <div class="field"><label>Rating text:</label><input type="text" value="{{ r.rating_text }}" readonly></div>
+      </div>
+    </div>
+
+    <div class="order-section">
+      <span>Order?</span>
+      <button type="button">Yes</button>
+      <button type="button">No</button>
+    </div>
+  </div>
+</body>
+</html>
